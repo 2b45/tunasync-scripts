@@ -16,7 +16,7 @@ docker run --rm \
     -v $BASE_PATH:/mirrors/cs2c \
     -v /home/scripts/:/home/scripts/ \
     tunathu/tunasync-scripts \
-    /bin/bash /home/scrips/cs2c.sh 
+    /bin/bash /home/scripts/gen_cs2c_ns.sh 
 
 echo "YUM finished"
 "${_here}/helpers/size-sum.sh" $REPO_SIZE_FILE --rm
