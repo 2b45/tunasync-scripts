@@ -1,26 +1,23 @@
 #!/bin/bash
-# http://update.cs2c.com.cn:8080/NS/
+# requires: docker 
 
-# reposync 解决了问题
+set -e
+set -o pipefail
 
-cat > yum-cs2c-v10.conf << EOF
-###Kylin Linux Advanced Server 10 - os repo###
-[ks10-adv-os]
-name = Kylin Linux Advanced Server 10 - Os 
-baseurl = http://update.cs2c.com.cn:8080/NS/V10/V10SP1/os/adv/lic/base/$basearch/
-gpgcheck = 0
-enabled = 1
-[ks10-adv-updates]
-name = Kylin Linux Advanced Server 10 - Updates
-baseurl = http://update.cs2c.com.cn:8080/NS/V10/V10SP1/os/adv/lic/updates/$basearch/
-gpgcheck = 0
-enabled = 0
-[ks10-adv-addons]
-name = Kylin Linux Advanced Server 10 - Addons
-baseurl = http://update.cs2c.com.cn:8080/NS/V10/V10SP1/os/adv/lic/addons/$basearch/
-gpgcheck = 0
-enabled = 0
-EOF 
+BASE_PATH="${TUNASYNC_WORKING_DIR}"
+BASE_URL=${TUNASYNC_UPSTREAM_URL:-"http://update.cs2c.com.cn:8080"}
+
+_here=`dirname $(realpath $0)`
 
 
-reposync --config yum-cs2c-v10.conf -d -p /data/cs2c/NS/V10/V10SP1/os/adv/lic/
+export REPO_SIZE_FILE=/tmp/reposize.$RANDOM
+
+docker run --rm \
+    -v $BASE_PATH:/mirrors/cs2c \
+    -v /home/scripts/:/home/scripts/ \
+    tunathu/tunasync-scripts \
+    /bin/bash /home/scrips/cs2c.sh 
+
+echo "YUM finished"
+"${_here}/helpers/size-sum.sh" $REPO_SIZE_FILE --rm
+
