@@ -15,7 +15,7 @@ BASE_PATH="${TUNASYNC_WORKING_DIR}"
 BASE_URL=${TUNASYNC_UPSTREAM_URL:-"http://archive.kylinos.cn/kylin/KYLIN-ALL"}
 
 
-export REPO_SIZE_FILE=/data/tmp/reposize.$RANDOM
+export REPO_SIZE_FILE=/tmp/reposize.$RANDOM
 
 #archs=amd64,arm64,armhf,i386,mips64el,sw64
 archs=amd64,arm64,i386
